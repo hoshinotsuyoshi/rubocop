@@ -507,3 +507,5 @@ require 'rubocop/runner'
 require 'rubocop/cli'
 require 'rubocop/options'
 require 'rubocop/remote_config'
+
+require 'rubocop/cop/style/simple_if_clause'

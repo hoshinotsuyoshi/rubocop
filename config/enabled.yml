@@ -1728,3 +1728,11 @@ Bundler/OrderedGems:
   Include:
     - '**/Gemfile'
     - '**/gems.rb'
+
+Style/SimpleIfClause:
+  Description: >-
+                  Check for simple usages of parallel assignment.
+                  It will only warn when the number of variables
+                  matches on both sides of the assignment.
+  StyleGuide: '#parallel-assignment'
+  Enabled: true
