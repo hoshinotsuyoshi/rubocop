@@ -42,8 +42,14 @@ module RuboCop
         end
 
         def autocorrect(node)
-          lambda do |corrector|
-            corrector.replace(node.loc.selector, style.to_s)
+          if style == :percent
+            lambda do |corrector|
+              corrector.replace(node.loc.expression, 'something % [a, b]')
+            end
+          else
+            lambda do |corrector|
+              corrector.replace(node.loc.selector, style.to_s)
+            end
           end
         end
       end

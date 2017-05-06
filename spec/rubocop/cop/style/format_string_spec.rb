@@ -197,7 +197,7 @@ describe RuboCop::Cop::Style::FormatString, :config do
       expect(cop.offenses).to be_empty
     end
 
-    xit do
+    it do
       corrected = autocorrect_source(cop, 'format(something, a, b)')
       expect(corrected).to eq 'something % [a, b]'
     end
