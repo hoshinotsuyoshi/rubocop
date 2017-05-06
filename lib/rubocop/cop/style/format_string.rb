@@ -54,9 +54,9 @@ module RuboCop
               if node.children.last.array_type?
                 elements = node.children.last.children.map(&:source).join(', ')
               else
-                elements = node.children[2..-1].map(&:source).join(', ')
+                elements = node.children.last.source
               end
-              corrected = "#{style}(#{node.children[0].source}, #{elements})"
+              corrected = "#{style}(#{node.children.first.source}, #{elements})"
               corrector.replace(node.loc.expression, corrected)
             end
           else
