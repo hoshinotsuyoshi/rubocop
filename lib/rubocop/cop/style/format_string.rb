@@ -51,11 +51,12 @@ module RuboCop
             end
           elsif node.children[1] == :%
             lambda do |corrector|
-              if node.children.last.array_type?
-                elements = node.children.last.children.map(&:source).join(', ')
-              else
-                elements = node.children.last.source
-              end
+              arg = node.children.last
+              elements = if arg.array_type?
+                           arg.children.map(&:source).join(', ')
+                         else
+                           arg.source
+                         end
               corrected = "#{style}(#{node.children.first.source}, #{elements})"
               corrector.replace(node.loc.expression, corrected)
             end
