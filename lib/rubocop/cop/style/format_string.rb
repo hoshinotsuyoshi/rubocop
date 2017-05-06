@@ -45,11 +45,8 @@ module RuboCop
           if style == :percent
             lambda do |corrector|
               receiver    = node.to_a[2].source
-              percent     = ' % '
-              array_begin = '['
               elements    = node.to_a[3..-1].map(&:source).join(', ')
-              array_end   = ']'
-              corrected   = [receiver, percent, array_begin, elements, array_end].join
+              corrected   = "#{receiver} % [#{elements}]"
               corrector.replace(node.loc.expression, corrected)
             end
           else
