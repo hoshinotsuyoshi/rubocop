@@ -66,7 +66,12 @@ describe RuboCop::Cop::Style::FormatString, :config do
       expect(corrected).to eq 'sprintf(something, a, b)'
     end
 
-    it 'auto-corrects unwanted method `String#%`' do
+    it 'auto-corrects unwanted method `String#%` with a string' do
+      corrected = autocorrect_source(cop, 'puts "%d" % 10')
+      expect(corrected).to eq 'puts sprintf("%d", 10)'
+    end
+
+    it 'auto-corrects unwanted method `String#%` with an array' do
       corrected = autocorrect_source(cop, 'puts x % [10, 11]')
       expect(corrected).to eq 'puts sprintf(x, 10, 11)'
     end
@@ -144,10 +149,14 @@ describe RuboCop::Cop::Style::FormatString, :config do
       expect(corrected).to eq 'format(something, a, b)'
     end
 
-    it 'auto-corrects unwanted method `String#%`' do
-      corrected = autocorrect_source(cop,
-                                     'puts "#{x * 5} %d #{@test}" % 10')
-      expect(corrected).to eq 'puts format("#{x * 5} %d #{@test}", 10)'
+    it 'auto-corrects unwanted method `String#%` with a string' do
+      corrected = autocorrect_source(cop, 'puts "%d" % 10')
+      expect(corrected).to eq 'puts format("%d", 10)'
+    end
+
+    it 'auto-corrects unwanted method `String#%` with an array' do
+      corrected = autocorrect_source(cop, 'puts x % [10, 11]')
+      expect(corrected).to eq 'puts format(x, 10, 11)'
     end
   end
 
