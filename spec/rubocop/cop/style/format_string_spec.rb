@@ -65,6 +65,11 @@ describe RuboCop::Cop::Style::FormatString, :config do
       corrected = autocorrect_source(cop, 'format(something, a, b)')
       expect(corrected).to eq 'sprintf(something, a, b)'
     end
+
+    it do
+      corrected = autocorrect_source(cop, 'puts x % [10, 11]')
+      expect(corrected).to eq 'puts sprintf(x, 10, 11)'
+    end
   end
 
   context 'when enforced style is format' do
