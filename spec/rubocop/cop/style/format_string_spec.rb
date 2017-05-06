@@ -60,6 +60,11 @@ describe RuboCop::Cop::Style::FormatString, :config do
       expect(cop.messages)
         .to eq(['Favor `sprintf` over `format`.'])
     end
+
+    it do
+      corrected = autocorrect_source(cop, 'format(something, a, b)')
+      expect(corrected).to eq 'sprintf(something, a, b)'
+    end
   end
 
   context 'when enforced style is format' do
@@ -128,6 +133,11 @@ describe RuboCop::Cop::Style::FormatString, :config do
       expect(cop.messages)
         .to eq(['Favor `format` over `sprintf`.'])
     end
+
+    it do
+      corrected = autocorrect_source(cop, 'sprintf(something, a, b)')
+      expect(corrected).to eq 'format(something, a, b)'
+    end
   end
 
   context 'when enforced style is percent' do
@@ -185,6 +195,11 @@ describe RuboCop::Cop::Style::FormatString, :config do
       inspect_source(cop,
                      'puts "%d" % 10')
       expect(cop.offenses).to be_empty
+    end
+
+    xit do
+      corrected = autocorrect_source(cop, 'format(something, a, b)')
+      expect(corrected).to eq 'something % [a, b]'
     end
   end
 end

@@ -40,6 +40,12 @@ module RuboCop
         def method_name(style_name)
           style_name == :percent ? 'String#%' : style_name
         end
+
+        def autocorrect(node)
+          lambda do |corrector|
+            corrector.replace(node.loc.selector, style.to_s)
+          end
+        end
       end
     end
   end
