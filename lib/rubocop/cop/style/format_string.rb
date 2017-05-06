@@ -56,9 +56,10 @@ module RuboCop
         private
 
         def autocorrect_to_percent(corrector, node)
-          receiver  = node.children[2].source
-          elements  = node.children[3..-1].map(&:source).join(', ')
-          corrected = "#{receiver} % [#{elements}]"
+          _, _, string, *args = *node
+          string = string.source
+          args   = args.map(&:source).join(', ')
+          corrected = "#{string} % [#{args}]"
           corrector.replace(node.loc.expression, corrected)
         end
 
