@@ -72,7 +72,12 @@ module RuboCop
           _, _, string, *args = *node
           string = string.source
           args   = if args.one?
-                     args.first.source
+                     arg = args.first
+                     if arg.hash_type?
+                       "{ #{arg.source} }"
+                     else
+                       arg.source
+                     end
                    else
                      "[#{args.map(&:source).join(', ')}]"
                    end
