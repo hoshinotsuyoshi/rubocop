@@ -42,15 +42,13 @@ module RuboCop
         end
 
         def autocorrect(node)
-          if style == :percent
-            lambda do |corrector|
+          lambda do |corrector|
+            if style == :percent
               receiver  = node.children[2].source
               elements  = node.children[3..-1].map(&:source).join(', ')
               corrected = "#{receiver} % [#{elements}]"
               corrector.replace(node.loc.expression, corrected)
-            end
-          elsif node.children[1] == :%
-            lambda do |corrector|
+            elsif node.children[1] == :%
               arg = node.children.last
               elements = if arg.array_type?
                            arg.children.map(&:source).join(', ')
@@ -59,9 +57,7 @@ module RuboCop
                          end
               corrected = "#{style}(#{node.children.first.source}, #{elements})"
               corrector.replace(node.loc.expression, corrected)
-            end
-          else
-            lambda do |corrector|
+            else
               corrector.replace(node.loc.selector, style.to_s)
             end
           end
