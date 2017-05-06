@@ -61,12 +61,12 @@ describe RuboCop::Cop::Style::FormatString, :config do
         .to eq(['Favor `sprintf` over `format`.'])
     end
 
-    it do
+    it 'auto-corrects unwanted method `format`' do
       corrected = autocorrect_source(cop, 'format(something, a, b)')
       expect(corrected).to eq 'sprintf(something, a, b)'
     end
 
-    it do
+    it 'auto-corrects unwanted method `String#%`' do
       corrected = autocorrect_source(cop, 'puts x % [10, 11]')
       expect(corrected).to eq 'puts sprintf(x, 10, 11)'
     end
@@ -139,12 +139,12 @@ describe RuboCop::Cop::Style::FormatString, :config do
         .to eq(['Favor `format` over `sprintf`.'])
     end
 
-    it do
+    it 'auto-corrects unwanted method `sprintf`' do
       corrected = autocorrect_source(cop, 'sprintf(something, a, b)')
       expect(corrected).to eq 'format(something, a, b)'
     end
 
-    it do
+    it 'auto-corrects unwanted method `String#%`' do
       corrected = autocorrect_source(cop,
                                      'puts "#{x * 5} %d #{@test}" % 10')
       expect(corrected).to eq 'puts format("#{x * 5} %d #{@test}", 10)'
@@ -208,12 +208,12 @@ describe RuboCop::Cop::Style::FormatString, :config do
       expect(cop.offenses).to be_empty
     end
 
-    it do
+    it 'auto-corrects unwanted method `format`' do
       corrected = autocorrect_source(cop, 'format(something, a, b)')
       expect(corrected).to eq 'something % [a, b]'
     end
 
-    it do
+    it 'auto-corrects unwanted method `format`' do
       corrected = autocorrect_source(cop, 'format("%d %04x", 123, 123)')
       expect(corrected).to eq '"%d %04x" % [123, 123]'
     end
