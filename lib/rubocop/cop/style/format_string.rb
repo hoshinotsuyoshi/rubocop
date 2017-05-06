@@ -64,13 +64,14 @@ module RuboCop
         end
 
         def autocorrect_from_percent(corrector, node)
-          arg = node.children.last
-          elements = if arg.array_type?
-                       arg.children.map(&:source).join(', ')
-                     else
-                       arg.source
-                     end
-          corrected = "#{style}(#{node.children.first.source}, #{elements})"
+          string, *_, args = *node
+          string = string.source
+          args = if args.array_type?
+                   args.children.map(&:source).join(', ')
+                 else
+                   args.source
+                 end
+          corrected = "#{style}(#{string}, #{args})"
           corrector.replace(node.loc.expression, corrected)
         end
       end
