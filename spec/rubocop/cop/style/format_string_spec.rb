@@ -142,7 +142,7 @@ describe RuboCop::Cop::Style::FormatString, :config do
     it do
       corrected = autocorrect_source(cop,
                                     'puts "#{x * 5} %d #{@test}" % 10')
-      expect(corrected).to eq 'format("#{x * 5} %d #{@test}", 10)"'
+      expect(corrected).to eq 'puts format("#{x * 5} %d #{@test}", 10)'
     end
   end
 
