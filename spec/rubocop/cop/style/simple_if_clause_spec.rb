@@ -18,7 +18,14 @@ describe RuboCop::Cop::Style::SimpleIfClause do
   end
 
   it 'accepts' do
-    inspect_source(cop, 'good_method')
+    inspect_source(cop, <<-END.strip_indent)
+      if foo
+        bar
+        true
+      else
+        false
+      end
+    END
     expect(cop.offenses).to be_empty
   end
 end
