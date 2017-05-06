@@ -227,32 +227,32 @@ describe RuboCop::Cop::Style::FormatString, :config do
       expect(cop.offenses).to be_empty
     end
 
-    it 'auto-corrects format with 2 args' do
+    it 'auto-corrects format with 2 arguments' do
       corrected = autocorrect_source(cop, 'format(something, a)')
       expect(corrected).to eq 'something % a'
     end
 
-    it 'auto-corrects format with 3 args' do
+    it 'auto-corrects format with 3 arguments' do
       corrected = autocorrect_source(cop, 'format(something, a, b)')
       expect(corrected).to eq 'something % [a, b]'
     end
 
-    it 'auto-corrects format with hash' do
+    it 'auto-corrects format with hash argument' do
       corrected = autocorrect_source(cop, 'format(something, a: 10, b: 11)')
       expect(corrected).to eq 'something % { a: 10, b: 11 }'
     end
 
-    it 'auto-corrects sprintf with 2 args' do
+    it 'auto-corrects sprintf with 2 arguments' do
       corrected = autocorrect_source(cop, 'sprintf(something, a)')
       expect(corrected).to eq 'something % a'
     end
 
-    it 'auto-corrects sprintf with 3 args' do
+    it 'auto-corrects sprintf with 3 arguments' do
       corrected = autocorrect_source(cop, 'sprintf(something, a, b)')
       expect(corrected).to eq 'something % [a, b]'
     end
 
-    it 'auto-corrects sprintf with hash' do
+    it 'auto-corrects sprintf with hash argument' do
       corrected = autocorrect_source(cop, 'sprintf(something, a: 10, b: 11)')
       expect(corrected).to eq 'something % { a: 10, b: 11 }'
     end
