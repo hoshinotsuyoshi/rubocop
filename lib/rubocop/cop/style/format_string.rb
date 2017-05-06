@@ -59,7 +59,7 @@ module RuboCop
         def autocorrect_from_percent(corrector, node)
           string, *_, args = *node
           string = string.source
-          args = if args.array_type?
+          args = if args.array_type? || args.hash_type?
                    args.children.map(&:source).join(', ')
                  else
                    args.source

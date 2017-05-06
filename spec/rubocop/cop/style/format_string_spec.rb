@@ -75,6 +75,11 @@ describe RuboCop::Cop::Style::FormatString, :config do
       corrected = autocorrect_source(cop, 'puts x % [10, 11]')
       expect(corrected).to eq 'puts sprintf(x, 10, 11)'
     end
+
+    it 'auto-corrects String#% with a hash' do
+      corrected = autocorrect_source(cop, 'puts x % { a: 10, b: 11 }')
+      expect(corrected).to eq 'puts sprintf(x, a: 10, b: 11)'
+    end
   end
 
   context 'when enforced style is format' do
@@ -157,6 +162,11 @@ describe RuboCop::Cop::Style::FormatString, :config do
     it 'auto-corrects String#% with an array' do
       corrected = autocorrect_source(cop, 'puts x % [10, 11]')
       expect(corrected).to eq 'puts format(x, 10, 11)'
+    end
+
+    it 'auto-corrects String#% with a hash' do
+      corrected = autocorrect_source(cop, 'puts x % { a: 10, b: 11 }')
+      expect(corrected).to eq 'puts format(x, a: 10, b: 11)'
     end
   end
 
