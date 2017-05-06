@@ -66,17 +66,17 @@ describe RuboCop::Cop::Style::FormatString, :config do
       expect(corrected).to eq 'sprintf(something, a, b)'
     end
 
-    it 'auto-corrects String#% with a string' do
+    it 'auto-corrects String#% with string argument' do
       corrected = autocorrect_source(cop, 'puts "%d" % 10')
       expect(corrected).to eq 'puts sprintf("%d", 10)'
     end
 
-    it 'auto-corrects String#% with an array' do
+    it 'auto-corrects String#% with array argument' do
       corrected = autocorrect_source(cop, 'puts x % [10, 11]')
       expect(corrected).to eq 'puts sprintf(x, 10, 11)'
     end
 
-    it 'auto-corrects String#% with a hash' do
+    it 'auto-corrects String#% with hash argument' do
       corrected = autocorrect_source(cop, 'puts x % { a: 10, b: 11 }')
       expect(corrected).to eq 'puts sprintf(x, a: 10, b: 11)'
     end
