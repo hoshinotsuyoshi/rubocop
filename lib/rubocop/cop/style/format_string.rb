@@ -71,8 +71,12 @@ module RuboCop
         def autocorrect_to_percent(corrector, node)
           _, _, string, *args = *node
           string = string.source
-          args   = args.map(&:source).join(', ')
-          corrected = "#{string} % [#{args}]"
+          args   = if args.one?
+                     args.first.source
+                   else
+                     "[#{args.map(&:source).join(', ')}]"
+                   end
+          corrected = "#{string} % #{args}"
           corrector.replace(node.loc.expression, corrected)
         end
       end

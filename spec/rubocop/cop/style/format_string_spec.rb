@@ -217,14 +217,24 @@ describe RuboCop::Cop::Style::FormatString, :config do
       expect(cop.offenses).to be_empty
     end
 
-    it 'auto-corrects unwanted method `format`' do
+    it 'auto-corrects format with 2 args' do
+      corrected = autocorrect_source(cop, 'format(something, a)')
+      expect(corrected).to eq 'something % a'
+    end
+
+    it 'auto-corrects format with 3 args' do
       corrected = autocorrect_source(cop, 'format(something, a, b)')
       expect(corrected).to eq 'something % [a, b]'
     end
 
-    it 'auto-corrects unwanted method `format`' do
-      corrected = autocorrect_source(cop, 'format("%d %04x", 123, 123)')
-      expect(corrected).to eq '"%d %04x" % [123, 123]'
+    it 'auto-corrects sprintf with 2 args' do
+      corrected = autocorrect_source(cop, 'sprintf(something, a)')
+      expect(corrected).to eq 'something % a'
+    end
+
+    it 'auto-corrects sprintf with 3 args' do
+      corrected = autocorrect_source(cop, 'sprintf(something, a, b)')
+      expect(corrected).to eq 'something % [a, b]'
     end
   end
 end
