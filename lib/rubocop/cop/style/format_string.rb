@@ -43,7 +43,8 @@ module RuboCop
 
         def autocorrect(node)
           lambda do |corrector|
-            if node.children[1] == :%
+            _, method = *node
+            if method == :%
               autocorrect_from_percent(corrector, node)
             elsif style == :percent
               autocorrect_to_percent(corrector, node)
