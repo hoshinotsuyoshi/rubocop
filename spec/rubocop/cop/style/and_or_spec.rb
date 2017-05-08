@@ -237,14 +237,21 @@ describe RuboCop::Cop::Style::AndOr, :config do
       expect(new_source).to eq('method(a, b) && b')
     end
 
-    it 'auto-corrects "and" with && and doesn\'t add useless parentheses' do
-      new_source = autocorrect_source(cop, 'a and a[x]')
-      expect(new_source).to eq('a && a[x]')
-    end
-
     it 'auto-corrects "and" with && and adds parentheses to expr' do
       new_source = autocorrect_source(cop, 'b and method a,b')
       expect(new_source).to eq('b && method(a,b)')
+    end
+
+    context 'given "a and a[x]"' do
+      it 'auto-corrects "and" with && and doesn\'t add useless parentheses' do
+        new_source = autocorrect_source(cop, 'a and a[x]')
+        expect(new_source).to eq('a && a[x]')
+      end
+
+      it 'auto-corrects "and" with && and adds parentheses to expr' do
+        new_source = autocorrect_source(cop, 'a and a.[] x')
+        expect(new_source).to eq('a && a.[](x)')
+      end
     end
 
     context 'with !obj.method arg on right' do
