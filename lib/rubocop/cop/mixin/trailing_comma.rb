@@ -104,7 +104,7 @@ module RuboCop
       end
 
       def elements(node)
-        return node.children unless node.send_type?
+        return node.children unless %i[csend send].include?(node.type)
 
         node.arguments.flat_map do |argument|
           # For each argument, if it is a multi-line hash without braces,

@@ -4,6 +4,10 @@
 
 ## 0.64.0 (2019-02-10)
 
+### Bug fixes
+
+* [#6755](https://github.com/rubocop-hq/rubocop/issues/6755): Prevent `Style/TrailingCommaInArgument` from breaking when a safe method call is chained on the offending method. ([@drenmi][])
+
 ### New features
 
 * [#6704](https://github.com/rubocop-hq/rubocop/pull/6704): Add new `Rails/ReflectionClassName` cop. ([@Bhacaz][])
