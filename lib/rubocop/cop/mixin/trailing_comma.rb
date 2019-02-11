@@ -91,7 +91,7 @@ module RuboCop
       end
 
       def method_name_and_arguments_on_same_line?(node)
-        node.send_type? &&
+        %i[csend send].include?(node.type) &&
           node.loc.selector.line == node.arguments.last.last_line &&
           node.last_line == node.arguments.last.last_line
       end

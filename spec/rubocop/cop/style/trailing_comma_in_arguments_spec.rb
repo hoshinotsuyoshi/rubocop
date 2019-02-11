@@ -39,6 +39,14 @@ RSpec.describe RuboCop::Cop::Style::TrailingCommaInArguments, :config do
       RUBY
     end
 
+    it 'accepts method call without trailing comma ' \
+       'when a line break before a method call', :ruby23 do
+      expect_no_offenses(<<-RUBY.strip_indent)
+        obj
+          &.do_something(:foo, :bar)
+      RUBY
+    end
+
     it 'accepts method call without trailing comma with single element hash' \
         ' parameters at the end' do
       expect_no_offenses('some_method(a: 1)')
