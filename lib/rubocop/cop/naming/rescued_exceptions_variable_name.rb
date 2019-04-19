@@ -64,7 +64,7 @@ module RuboCop
           return if @exception_name.const_type? ||
                     variable_name == preferred_name
 
-          add_offense(node, location: location)
+          add_offense(node, location: @exception_name.loc.expression)
         end
 
         def autocorrect(_node)
