@@ -57,42 +57,42 @@ module RuboCop
         MSG = 'Use `%<preferred>s` instead of `%<bad>s`.'.freeze
 
         def on_resbody(node)
-          exception_type, @exception_name = *node
-          return unless exception_type || @exception_name
+          exception_type, exception_name = *node
+          return unless exception_type || exception_name
 
-          @exception_name ||= exception_type.children.first
-          return if @exception_name.const_type? ||
-                    variable_name == preferred_name
+          exception_name ||= exception_type.children.first
+          return if exception_name.const_type? ||
+                    variable_name(exception_name) == preferred_name(exception_name)
 
-          add_offense(node, location: location)
+          add_offense(node, location: location(exception_name))
         end
 
-        def autocorrect(_node)
+        def autocorrect(node)
           lambda do |corrector|
-            corrector.replace(location, preferred_name)
+            _, exception_name = *node
+            corrector.replace(location(exception_name), preferred_name)
           end
         end
 
         private
 
-        def preferred_name
-          @preferred_name ||= begin
-            name = cop_config.fetch('PreferredName', 'e')
-            name = "_#{name}" if variable_name.to_s.start_with?('_')
-            name
-          end
+        def preferred_name(exception_name)
+          name = cop_config.fetch('PreferredName', 'e')
+          name = "_#{name}" if variable_name(exception_name).to_s.start_with?('_')
+          name
         end
 
-        def variable_name
-          @variable_name ||= location.source
+        def variable_name(exception_name)
+          location(exception_name).source
         end
 
-        def location
-          @location ||= @exception_name.loc.expression
+        def location(exception_name)
+          exception_name.loc.expression
         end
 
-        def message(_node = nil)
-          format(MSG, preferred: preferred_name, bad: variable_name)
+        def message(node)
+          _, exception_name = *node
+          format(MSG, preferred: preferred_name(exception_name), bad: variable_name(exception_name))
         end
       end
     end

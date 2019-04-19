@@ -169,7 +169,27 @@ RSpec.describe RuboCop::Cop::Naming::RescuedExceptionsVariableName, :config do
           # do something
         end
       RUBY
+    end
 
+    it 'registers two offenses when using `e`' do
+      expect_offense(<<-RUBY.strip_indent)
+        begin
+          something
+        rescue MyException => e
+                              ^ Use `exception` instead of `e`.
+          # do something
+        end
+
+        begin
+          something
+        rescue MyException => e
+                              ^ Use `exception` instead of `e`.
+          # do something
+        end
+      RUBY
+    end
+
+    it 'auto-corrects an offense when using `e`' do
       expect_correction(<<-RUBY.strip_indent)
         begin
           something
