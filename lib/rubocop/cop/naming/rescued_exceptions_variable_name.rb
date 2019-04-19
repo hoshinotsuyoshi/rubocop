@@ -69,7 +69,10 @@ module RuboCop
 
         def autocorrect(_node)
           lambda do |corrector|
-            corrector.replace(location, preferred_name)
+            exception_type, @exception_name = *node
+            return unless exception_type || @exception_name
+            @exception_name ||= exception_type.children.first
+            corrector.replace(@exception_name.loc.expression, preferred_name)
           end
         end
 

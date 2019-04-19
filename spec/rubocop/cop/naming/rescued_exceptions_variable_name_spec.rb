@@ -183,15 +183,29 @@ RSpec.describe RuboCop::Cop::Naming::RescuedExceptionsVariableName, :config do
       expect_offense(<<-RUBY.strip_indent)
         begin
           something
-        rescue MyException => e
-                              ^ Use `exception` instead of `e`.
+        rescue MyException1 => e
+                               ^ Use `exception` instead of `e`.
           # do something
         end
 
         begin
           something
-        rescue MyException => e
-                              ^ Use `exception` instead of `e`.
+        rescue MyException2 => e
+                               ^ Use `exception` instead of `e`.
+          # do something
+        end
+      RUBY
+
+      expect_correction(<<-RUBY.strip_indent)
+        begin
+          something
+        rescue MyException1 => exception
+          # do something
+        end
+
+        begin
+          something
+        rescue MyException2 => exception
           # do something
         end
       RUBY
