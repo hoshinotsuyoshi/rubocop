@@ -1,11 +1,26 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+require 'rblineprof'
+require 'rblineprof-report'
+
+
 $LOAD_PATH.unshift("#{__dir__}/../lib")
 
 require 'rubocop'
 require 'benchmark'
 
+# すべてのRubyファイルを対象にする (gemなども計測される)
+target = /./
+
+# カレントディレクトリ以下のRubyファイルを対象にする
+# target = /#{Dir.pwd}\/./
+
+result = nil
+
+profile = lineprof(target) do
+
+###
 cli = RuboCop::CLI.new
 result = 0
 
@@ -14,4 +29,11 @@ time = Benchmark.realtime do
 end
 
 puts "Finished in #{time} seconds" if cli.options[:debug]
+puts "exit #{result}"
+
+###
+
+end
+LineProf.report(profile)
+
 exit result
