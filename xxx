@@ -79,71 +79,71 @@ exit 1
 exe/rubocop
 [90m               |  26  ###
 [0m[90m               |  27  time = Benchmark.realtime do
-[0m[31m 208.5ms     1 |  28    result = cli.run
+[0m[31m 225.2ms     1 |  28    result = cli.run
 [0m[90m               |  29  end
 [0m[90m               |  30  
 [0m
 lib/rubocop/cli.rb
 [90m               |  41      # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
 [0m[90m               |  42      def run(args = ARGV)
-[0m[33m  28.0ms     3 |  43        @options, paths = Options.new.parse(args)
+[0m[33m  28.6ms     3 |  43        @options, paths = Options.new.parse(args)
 [0m[90m               |  44  
 [0m[90m               |  45        if @options[:init]
 [0m[90m              .......[0m
 [90m               |  49          act_on_options
 [0m[90m               |  50          apply_default_formatter
-[0m[31m 180.4ms     1 |  51          execute_runners(paths)
+[0m[31m 196.6ms     1 |  51          execute_runners(paths)
 [0m[90m               |  52        end
 [0m[90m               |  53      rescue ConfigNotFoundError, IncorrectCopNameError, OptionArgumentError => e
 [0m[90m              .......[0m
 [90m               |  78          run_all_cops_auto_gen_config(line_length_contents, paths)
 [0m[90m               |  79        else
-[0m[31m 180.4ms     1 |  80          execute_runner(paths)
+[0m[31m 196.6ms     1 |  80          execute_runner(paths)
 [0m[90m               |  81        end
 [0m[90m               |  82      end
 [0m[90m              .......[0m
 [90m               |  208        runner = Runner.new(@options, @config_store)
 [0m[90m               |  209  
-[0m[31m 180.4ms     1 |  210        all_passed = runner.run(paths)
+[0m[31m 196.5ms     1 |  210        all_passed = runner.run(paths)
 [0m[90m               |  211        display_warning_summary(runner.warnings)
 [0m[90m               |  212        display_error_summary(runner.errors)
 [0m
 lib/rubocop/options.rb
 [90m               |  24      def parse(command_line_args)
 [0m[90m               |  25        args = args_from_file.concat(args_from_env).concat(command_line_args)
-[0m[33m  27.9ms     2 |  26        define_options.parse!(args)
+[0m[33m  28.4ms     2 |  26        define_options.parse!(args)
 [0m[90m               |  27  
 [0m[90m               |  28        @validator.validate_compatibility
 [0m[90m              .......[0m
 [90m               |  57  
 [0m[90m               |  58      def define_options
-[0m[33m  27.6ms     2 |  59        OptionParser.new do |opts|
+[0m[33m  28.1ms     2 |  59        OptionParser.new do |opts|
 [0m[90m               |  60          opts.banner = 'Usage: rubocop [options] [file1, file2, ...]'
 [0m[90m               |  61  
-[0m[37m   0.5ms     1 |  62          add_list_options(opts)
-[0m[37m   1.2ms     1 |  63          add_only_options(opts)
-[0m[33m   5.4ms     1 |  64          add_configuration_options(opts)
-[0m[37m   2.9ms     1 |  65          add_formatting_options(opts)
+[0m[37m   0.6ms     1 |  62          add_list_options(opts)
+[0m[37m   1.3ms     1 |  63          add_only_options(opts)
+[0m[33m   5.3ms     1 |  64          add_configuration_options(opts)
+[0m[37m   2.8ms     1 |  65          add_formatting_options(opts)
 [0m[90m               |  66  
 [0m[37m   0.6ms     1 |  67          option(opts, '-r', '--require FILE') { |f| require f }
 [0m[90m               |  68  
 [0m[37m   1.6ms     1 |  69          add_severity_option(opts)
 [0m[37m   0.7ms     1 |  70          add_flags_with_optional_args(opts)
-[0m[33m  10.9ms     1 |  71          add_boolean_flags(opts)
-[0m[37m   2.6ms     1 |  72          add_aliases(opts)
+[0m[33m  11.4ms     1 |  71          add_boolean_flags(opts)
+[0m[37m   2.5ms     1 |  72          add_aliases(opts)
 [0m[90m               |  73  
 [0m[37m   1.0ms     1 |  74          option(opts, '-s', '--stdin FILE')
 [0m[90m               |  75        end
 [0m[90m               |  76      end
 [0m[90m               |  77  
 [0m[90m               |  78      def add_only_options(opts)
-[0m[37m   0.4ms     1 |  79        add_cop_selection_csv_option('except', opts)
+[0m[37m   0.5ms     1 |  79        add_cop_selection_csv_option('except', opts)
 [0m[37m   0.4ms     1 |  80        add_cop_selection_csv_option('only', opts)
 [0m[37m   0.4ms     1 |  81        option(opts, '--only-guide-cops')
 [0m[90m               |  82      end
 [0m[90m               |  83  
 [0m[90m               |  84      def add_cop_selection_csv_option(option, opts)
-[0m[37m   0.7ms     2 |  85        option(opts, "--#{option} [COP1,COP2,...]") do |list|
+[0m[37m   0.9ms     2 |  85        option(opts, "--#{option} [COP1,COP2,...]") do |list|
 [0m[90m               |  86          @options[:"#{option}"] =
 [0m[90m               |  87            if list.empty?
 [0m[90m              .......[0m
@@ -176,7 +176,7 @@ lib/rubocop/options.rb
 [0m[90m               |  122      end
 [0m[90m               |  123  
 [0m[90m               |  124      def add_formatting_options(opts)
-[0m[37m   2.0ms     1 |  125        option(opts, '-f', '--format FORMATTER') do |key|
+[0m[37m   1.9ms     1 |  125        option(opts, '-f', '--format FORMATTER') do |key|
 [0m[90m               |  126          @options[:formatters] ||= []
 [0m[90m               |  127          @options[:formatters] << [key]
 [0m[90m               |  128        end
@@ -203,12 +203,12 @@ lib/rubocop/options.rb
 [90m               |  154  
 [0m[90m               |  155      def add_boolean_flags(opts)
 [0m[37m   0.8ms     1 |  156        option(opts, '-F', '--fail-fast')
-[0m[37m   0.9ms     1 |  157        option(opts, '-C', '--cache FLAG')
-[0m[37m   0.7ms     1 |  158        option(opts, '-d', '--debug')
-[0m[37m   0.8ms     1 |  159        option(opts, '-D', '--[no-]display-cop-names')
-[0m[37m   0.7ms     1 |  160        option(opts, '-E', '--extra-details')
-[0m[37m   0.7ms     1 |  161        option(opts, '-S', '--display-style-guide')
-[0m[37m   0.7ms     1 |  162        option(opts, '-R', '--rails')
+[0m[37m   0.8ms     1 |  157        option(opts, '-C', '--cache FLAG')
+[0m[37m   0.8ms     1 |  158        option(opts, '-d', '--debug')
+[0m[37m   0.9ms     1 |  159        option(opts, '-D', '--[no-]display-cop-names')
+[0m[37m   0.8ms     1 |  160        option(opts, '-E', '--extra-details')
+[0m[37m   0.9ms     1 |  161        option(opts, '-S', '--display-style-guide')
+[0m[37m   0.9ms     1 |  162        option(opts, '-R', '--rails')
 [0m[37m   0.8ms     1 |  163        option(opts, '-a', '--auto-correct')
 [0m[37m   0.8ms     1 |  164        option(opts, '--ignore-disable-comments')
 [0m[90m               |  165  
@@ -226,7 +226,7 @@ lib/rubocop/options.rb
 [0m[90m               |  177          @options[:only] ||= []
 [0m[90m               |  178          @options[:only] << 'Lint'
 [0m[90m               |  179        end
-[0m[37m   1.0ms     1 |  180        option(opts, '-x', '--fix-layout') do
+[0m[37m   0.9ms     1 |  180        option(opts, '-x', '--fix-layout') do
 [0m[90m               |  181          @options[:only] ||= []
 [0m[90m               |  182          @options[:only] << 'Layout'
 [0m[90m               |  183          @options[:auto_correct] = true
@@ -237,7 +237,7 @@ lib/rubocop/options.rb
 [0m[90m              .......[0m
 [90m               |  189  
 [0m[90m               |  190      def add_list_options(opts)
-[0m[37m   0.5ms     1 |  191        option(opts, '-L', '--list-target-files')
+[0m[37m   0.6ms     1 |  191        option(opts, '-L', '--list-target-files')
 [0m[90m               |  192      end
 [0m[90m               |  193  
 [0m[90m              .......[0m
@@ -245,29 +245,31 @@ lib/rubocop/options.rb
 [0m[90m               |  196      def option(opts, *args)
 [0m[37m   1.2ms    38 |  197        long_opt_symbol = long_opt_symbol(args)
 [0m[90m               |  198        args += Array(OptionsHelp::TEXT[long_opt_symbol])
-[0m[33m  25.9ms    38 |  199        opts.on(*args) do |arg|
+[0m[33m  26.3ms    38 |  199        opts.on(*args) do |arg|
 [0m[90m               |  200          @options[long_opt_symbol] = arg
 [0m[90m               |  201          yield arg if block_given?
 [0m[90m              .......[0m
 [90m               |  206      # e.g. [..., '--auto-correct', ...] to :auto_correct.
 [0m[90m               |  207      def long_opt_symbol(args)
-[0m[37m   0.3ms   133 |  208        long_opt = args.find { |arg| arg.start_with?('--') }
-[0m[37m   0.3ms   114 |  209        long_opt[2..-1].sub('[no-]', '').sub(/ .*/, '')
+[0m[37m   0.4ms   133 |  208        long_opt = args.find { |arg| arg.start_with?('--') }
+[0m[37m   0.2ms   114 |  209        long_opt[2..-1].sub('[no-]', '').sub(/ .*/, '')
 [0m[37m   0.2ms   114 |  210                       .tr('-', '_').gsub(/[\[\]]/, '').to_sym
 [0m[90m               |  211      end
 [0m[90m               |  212    end
 [0m
 /Users/hoshino/.rbenv/versions/2.6.3/lib/ruby/2.6.0/optparse.rb
-[90m               |  809        lopts.each {|o| @long[o] = sw} if lopts
+[90m               |  807      def update(sw, sopts, lopts, nsw = nil, nlopts = nil)
+[0m[90m               |  808        sopts.each {|o| @short[o] = sw} if sopts
+[0m[37m   0.2ms    76 |  809        lopts.each {|o| @long[o] = sw} if lopts
 [0m[90m               |  810        nlopts.each {|o| @long[o] = nsw} if nsw and nlopts
-[0m[33m   6.0ms  1940 |  811        used = @short.invert.update(@long.invert)
-[0m[37m   4.1ms  1444 |  812        @list.delete_if {|o| Switch === o and !used[o]}
+[0m[33m   6.1ms  1940 |  811        used = @short.invert.update(@long.invert)
+[0m[37m   4.2ms  1444 |  812        @list.delete_if {|o| Switch === o and !used[o]}
 [0m[90m               |  813      end
 [0m[90m               |  814      private :update
 [0m[90m              .......[0m
 [90m               |  842      #
 [0m[90m               |  843      def append(*args)
-[0m[33m  10.8ms    38 |  844        update(*args)
+[0m[33m  11.0ms    38 |  844        update(*args)
 [0m[90m               |  845        @list.push(args[0])
 [0m[90m               |  846      end
 [0m[90m              .......[0m
@@ -279,7 +281,7 @@ lib/rubocop/options.rb
 [0m[90m              .......[0m
 [90m               |  1369      has_arg = false
 [0m[90m               |  1370  
-[0m[33m  12.9ms    38 |  1371      opts.each do |o|
+[0m[33m  13.1ms    38 |  1371      opts.each do |o|
 [0m[90m               |  1372        # argument class
 [0m[37m   4.0ms   143 |  1373        next if search(:atype, o) do |pat, c|
 [0m[90m               |  1374          klass = notwice(o, klass, 'type')
@@ -295,7 +297,7 @@ lib/rubocop/options.rb
 [0m[90m              .......[0m
 [90m               |  1407        when Module
 [0m[90m               |  1408          raise ArgumentError, "unsupported argument type: #{o}", ParseError.filter_backtrace(caller(4))
-[0m[37m   1.2ms   987 |  1409        when *ArgumentStyle.keys
+[0m[37m   1.3ms   987 |  1409        when *ArgumentStyle.keys
 [0m[90m               |  1410          style = notwice(ArgumentStyle[o], style, 'style')
 [0m[37m   0.2ms   141 |  1411        when /^--no-([^\[\]=\s]*)(.+)?/
 [0m[90m               |  1412          q, a = $1, $2
@@ -314,12 +316,12 @@ lib/rubocop/options.rb
 [0m[90m               |  1437          if a
 [0m[90m               |  1438            o = notwice(NilClass, klass, 'type')
 [0m[90m               |  1439            default_style = default_style.guess(arg = a)
-[0m[37m   0.4ms    11 |  1440            default_pattern, conv = search(:atype, o) unless default_pattern
+[0m[37m   0.5ms    11 |  1440            default_pattern, conv = search(:atype, o) unless default_pattern
 [0m[90m               |  1441          end
 [0m[90m               |  1442          ldesc << "--#{q}"
 [0m[90m               |  1443          (o = q.downcase).tr!('_', '-')
 [0m[90m               |  1444          long << o
-[0m[37m   0.2ms   103 |  1445        when /^-(\[\^?\]?(?:[^\\\]]|\\.)*\])(.+)?/
+[0m[90m               |  1445        when /^-(\[\^?\]?(?:[^\\\]]|\\.)*\])(.+)?/
 [0m[90m               |  1446          q, a = $1, $2
 [0m[90m               |  1447          o = notwice(Object, klass, 'type')
 [0m[90m              .......[0m
@@ -336,13 +338,13 @@ lib/rubocop/options.rb
 [0m[90m              .......[0m
 [90m               |  1494  
 [0m[90m               |  1495    def define(*opts, &block)
-[0m[33m  25.5ms   114 |  1496      top.append(*(sw = make_switch(opts, block)))
+[0m[33m  25.9ms   114 |  1496      top.append(*(sw = make_switch(opts, block)))
 [0m[90m               |  1497      sw[0]
 [0m[90m               |  1498    end
 [0m[90m              .......[0m
 [90m               |  1503    #
 [0m[90m               |  1504    def on(*opts, &block)
-[0m[33m  25.8ms    38 |  1505      define(*opts, &block)
+[0m[33m  26.2ms    38 |  1505      define(*opts, &block)
 [0m[90m               |  1506      self
 [0m[90m               |  1507    end
 [0m[90m              .......[0m
@@ -366,7 +368,7 @@ lib/rubocop/options.rb
 [0m[90m              .......[0m
 [90m               |  1676        order!(argv, into: into)
 [0m[90m               |  1677      else
-[0m[37m   0.2ms     1 |  1678        permute!(argv, into: into)
+[0m[37m   0.3ms     1 |  1678        permute!(argv, into: into)
 [0m[90m               |  1679      end
 [0m[90m               |  1680    end
 [0m[90m              .......[0m
@@ -380,109 +382,110 @@ lib/rubocop/options.rb
 [90m               |  1745    #
 [0m[90m               |  1746    def search(id, key)
 [0m[37m   0.2ms   188 |  1747      block_given = block_given?
-[0m[37m   4.7ms   188 |  1748      visit(:search, id, key) do |k|
+[0m[37m   4.8ms   188 |  1748      visit(:search, id, key) do |k|
 [0m[90m               |  1749        return block_given ? yield(k) : k
 [0m[90m               |  1750      end
 [0m
 lib/rubocop/runner.rb
-[90m               |  32  
-[0m[90m               |  33      def run(paths)
-[0m[31m  75.6ms     1 |  34        target_files = find_target_files(paths)
-[0m[90m               |  35        if @options[:list_target_files]
-[0m[90m               |  36          list_files(target_files)
-[0m[90m               |  37        else
-[0m[90m               |  38          warm_cache(target_files) if @options[:parallel]
-[0m[31m 104.8ms     1 |  39          inspect_files(target_files)
-[0m[90m               |  40        end
-[0m[90m               |  41      rescue Interrupt
+[90m               |  36        #  target_files = [File.absolute_path(paths.first)]
+[0m[90m               |  37        # else
+[0m[31m  82.2ms     1 |  38        target_files = find_target_files(paths)
+[0m[90m               |  39        # end
+[0m[90m               |  40        # warn(Time.now - t)
 [0m[90m              .......[0m
-[90m               |  62      def find_target_files(paths)
-[0m[90m               |  63        target_finder = TargetFinder.new(@config_store, @options)
-[0m[31m  75.6ms     1 |  64        target_files = target_finder.find(paths)
-[0m[90m               |  65        target_files.each(&:freeze).freeze
-[0m[90m               |  66      end
+[90m               |  43        else
+[0m[90m               |  44          warm_cache(target_files) if @options[:parallel]
+[0m[31m 114.3ms     1 |  45          inspect_files(target_files)
+[0m[90m               |  46        end
+[0m[90m               |  47      rescue Interrupt
 [0m[90m              .......[0m
-[90m               |  71        formatter_set.started(files)
-[0m[90m               |  72  
-[0m[31m 104.6ms     1 |  73        each_inspected_file(files) { |file| inspected_files << file }
-[0m[90m               |  74      ensure
-[0m[33m   9.8ms     2 |  75        ResultCache.cleanup(@config_store, @options[:debug]) if cached_run?
-[0m[90m               |  76        formatter_set.finished(inspected_files.freeze)
-[0m[90m               |  77        formatter_set.close_output_files
+[90m               |  68      def find_target_files(paths)
+[0m[90m               |  69        target_finder = TargetFinder.new(@config_store, @options)
+[0m[31m  82.2ms     1 |  70        target_files = target_finder.find(paths)
+[0m[90m               |  71        target_files.each(&:freeze).freeze
+[0m[90m               |  72      end
 [0m[90m              .......[0m
-[90m               |  79  
-[0m[90m               |  80      def each_inspected_file(files)
-[0m[31m  94.6ms     2 |  81        files.reduce(true) do |all_passed, file|
-[0m[31m  94.6ms     1 |  82          offenses = process_file(file)
-[0m[90m               |  83          yield file
-[0m[90m               |  84  
+[90m               |  77        formatter_set.started(files)
+[0m[90m               |  78  
+[0m[31m 114.2ms     1 |  79        each_inspected_file(files) { |file| inspected_files << file }
+[0m[90m               |  80      ensure
+[0m[37m   4.3ms     2 |  81        ResultCache.cleanup(@config_store, @options[:debug]) if cached_run?
+[0m[90m               |  82        formatter_set.finished(inspected_files.freeze)
+[0m[90m               |  83        formatter_set.close_output_files
 [0m[90m              .......[0m
-[90m               |  103        file_started(file)
-[0m[90m               |  104  
-[0m[31m  94.5ms     1 |  105        offenses = file_offenses(file)
-[0m[90m               |  106        if @options[:display_only_fail_level_offenses]
-[0m[90m               |  107          offenses = offenses.select { |o| considered_failure?(o) }
-[0m[90m               |  108        end
-[0m[33m  15.5ms     2 |  109        formatter_set.file_finished(file, offenses)
-[0m[90m               |  110        offenses
-[0m[90m               |  111      rescue InfiniteCorrectionLoop => e
+[90m               |  85  
+[0m[90m               |  86      def each_inspected_file(files)
+[0m[31m 109.7ms     2 |  87        files.reduce(true) do |all_passed, file|
+[0m[31m 109.7ms     1 |  88          offenses = process_file(file)
+[0m[90m               |  89          yield file
+[0m[90m               |  90  
 [0m[90m              .......[0m
-[90m               |  115  
-[0m[90m               |  116      def file_offenses(file)
-[0m[31m  79.0ms     1 |  117        file_offense_cache(file) do
-[0m[90m               |  118          source = get_processed_source(file)
-[0m[90m               |  119          source, offenses = do_inspection_loop(file, source)
+[90m               |  109        file_started(file)
+[0m[90m               |  110  
+[0m[31m 109.6ms     1 |  111        offenses = file_offenses(file)
+[0m[90m               |  112        if @options[:display_only_fail_level_offenses]
+[0m[90m               |  113          offenses = offenses.select { |o| considered_failure?(o) }
+[0m[90m               |  114        end
+[0m[33m  15.5ms     2 |  115        formatter_set.file_finished(file, offenses)
+[0m[90m               |  116        offenses
+[0m[90m               |  117      rescue InfiniteCorrectionLoop => e
 [0m[90m              .......[0m
-[90m               |  123  
-[0m[90m               |  124      def file_offense_cache(file)
-[0m[31m  79.0ms     3 |  125        cache = ResultCache.new(file, @options, @config_store) if cached_run?
-[0m[90m               |  126        if cache && cache.valid?
-[0m[37m   4.1ms     1 |  127          offenses = cache.load
-[0m[90m               |  128          # If we're running --auto-correct and the cache says there are
-[0m[90m               |  129          # offenses, we need to actually inspect the file. If the cache shows no
+[90m               |  121  
+[0m[90m               |  122      def file_offenses(file)
+[0m[31m  94.1ms     1 |  123        file_offense_cache(file) do
+[0m[90m               |  124          source = get_processed_source(file)
+[0m[90m               |  125          source, offenses = do_inspection_loop(file, source)
+[0m[90m              .......[0m
+[90m               |  129  
+[0m[90m               |  130      def file_offense_cache(file)
+[0m[31m  94.1ms     3 |  131        cache = ResultCache.new(file, @options, @config_store) if cached_run?
+[0m[90m               |  132        if cache && cache.valid?
+[0m[37m   4.4ms     1 |  133          offenses = cache.load
+[0m[90m               |  134          # If we're running --auto-correct and the cache says there are
+[0m[90m               |  135          # offenses, we need to actually inspect the file. If the cache shows no
 [0m
 lib/rubocop/target_finder.rb
 [90m               |  33        files = []
 [0m[90m               |  34  
-[0m[31m  75.5ms     2 |  35        args.uniq.each do |arg|
+[0m[31m  82.1ms     2 |  35        args.uniq.each do |arg|
 [0m[90m               |  36          files += if File.directory?(arg)
 [0m[90m               |  37                     target_files_in_dir(arg.chomp(File::SEPARATOR))
 [0m[90m               |  38                   else
-[0m[31m  75.5ms     1 |  39                     process_explicit_path(arg)
+[0m[31m  82.1ms     1 |  39                     process_explicit_path(arg)
 [0m[90m               |  40                   end
 [0m[90m               |  41        end
 [0m[90m              .......[0m
 [90m               |  116  
 [0m[90m               |  117      def ruby_extension?(file)
-[0m[31m  75.5ms     3 |  118        ruby_extensions.include?(File.extname(file))
+[0m[31m  82.1ms     3 |  118        ruby_extensions.include?(File.extname(file))
 [0m[90m               |  119      end
 [0m[90m               |  120  
 [0m[90m               |  121      def ruby_extensions
-[0m[31m  75.4ms     2 |  122        ext_patterns = all_cops_include.select do |pattern|
+[0m[31m  82.0ms     2 |  122        ext_patterns = all_cops_include.select do |pattern|
 [0m[90m               |  123          pattern.start_with?('**/*.')
 [0m[90m               |  124        end
 [0m[90m              .......[0m
 [90m               |  138  
 [0m[90m               |  139      def all_cops_include
-[0m[31m  75.3ms    51 |  140        @config_store.for('.').for_all_cops['Include'].map(&:to_s)
+[0m[31m  81.8ms    51 |  140        @config_store.for('.').for_all_cops['Include'].map(&:to_s)
 [0m[90m               |  141      end
 [0m[90m               |  142  
 [0m[90m              .......[0m
 [90m               |  161  
 [0m[90m               |  162      def ruby_file?(file)
-[0m[31m  75.5ms     2 |  163        stdin? || ruby_extension?(file) || ruby_filename?(file) ||
+[0m[31m  82.1ms     2 |  163        stdin? || ruby_extension?(file) || ruby_filename?(file) ||
 [0m[90m               |  164          ruby_executable?(file)
 [0m[90m               |  165      end
 [0m[90m              .......[0m
 [90m               |  170  
 [0m[90m               |  171      def included_file?(file)
-[0m[31m  75.5ms     1 |  172        ruby_file?(file) || configured_include?(file)
+[0m[31m  82.1ms     1 |  172        ruby_file?(file) || configured_include?(file)
 [0m[90m               |  173      end
 [0m[90m               |  174  
 [0m[90m              .......[0m
 [90m               |  176        files = path.include?('*') ? Dir[path] : [path]
 [0m[90m               |  177  
-[0m[31m  75.5ms     2 |  178        files.select! { |file| included_file?(file) }
+[0m[31m  82.1ms     2 |  178        files.select! { |file| included_file?(file) }
 [0m[90m               |  179  
 [0m[90m               |  180        return files unless force_exclusion?
 [0m
@@ -493,31 +496,31 @@ lib/rubocop/config_store.rb
 [0m[90m               |  41        path = @path_cache[dir]
 [0m[90m               |  42        @object_cache[path] ||= begin
 [0m[90m               |  43                                  print "For #{dir}: " if ConfigLoader.debug?
-[0m[31m  74.9ms     1 |  44                                  ConfigLoader.configuration_from_file(path)
+[0m[31m  81.4ms     1 |  44                                  ConfigLoader.configuration_from_file(path)
 [0m[90m               |  45                                end
 [0m[90m               |  46      end
 [0m
 lib/rubocop/config_loader.rb
 [90m               |  40          path = File.absolute_path(file.is_a?(RemoteConfig) ? file.file : file)
 [0m[90m               |  41  
-[0m[37m   1.8ms     3 |  42          hash = load_yaml_configuration(path)
+[0m[37m   2.0ms     3 |  42          hash = load_yaml_configuration(path)
 [0m[90m               |  43  
 [0m[90m               |  44          # Resolve requires first in case they define additional cops
 [0m[90m               |  45          resolver.resolve_requires(path, hash)
 [0m[90m               |  46  
-[0m[33m  32.3ms     3 |  47          add_missing_namespaces(path, hash)
+[0m[33m  35.4ms     3 |  47          add_missing_namespaces(path, hash)
 [0m[90m               |  48  
 [0m[90m               |  49          resolver.resolve_inheritance_from_gems(hash, hash.delete('inherit_gem'))
-[0m[31m  51.9ms     6 |  50          resolver.resolve_inheritance(path, hash, file, debug?)
+[0m[31m  56.9ms     6 |  50          resolver.resolve_inheritance(path, hash, file, debug?)
 [0m[90m               |  51  
 [0m[90m               |  52          hash.delete('inherit_from')
 [0m[90m               |  53  
-[0m[31m  72.9ms     3 |  54          Config.create(hash, path)
+[0m[31m  79.0ms     3 |  54          Config.create(hash, path)
 [0m[90m               |  55        end
 [0m[90m               |  56  
 [0m[90m               |  57        def add_missing_namespaces(path, hash)
-[0m[33m  32.3ms     6 |  58          hash.keys.each do |key|
-[0m[33m  31.6ms   454 |  59            q = Cop::Cop.qualified_cop_name(key, path)
+[0m[33m  35.4ms     6 |  58          hash.keys.each do |key|
+[0m[33m  34.7ms   454 |  59            q = Cop::Cop.qualified_cop_name(key, path)
 [0m[90m               |  60            next if q == key
 [0m[90m               |  61  
 [0m[90m              .......[0m
@@ -529,32 +532,32 @@ lib/rubocop/config_loader.rb
 [0m[90m              .......[0m
 [90m               |  84  
 [0m[90m               |  85        def configuration_from_file(config_file)
-[0m[31m  72.4ms     1 |  86          config = load_file(config_file)
+[0m[31m  78.7ms     1 |  86          config = load_file(config_file)
 [0m[90m               |  87          return config if config_file == DEFAULT_FILE
 [0m[90m               |  88  
 [0m[90m              .......[0m
 [90m               |  90            print 'Ignoring AllCops/Exclude from parent folders' if debug?
 [0m[90m               |  91          else
-[0m[37m   1.6ms     1 |  92            add_excludes_from_files(config, config_file)
+[0m[37m   1.8ms     1 |  92            add_excludes_from_files(config, config_file)
 [0m[90m               |  93          end
-[0m[37m   0.9ms     1 |  94          merge_with_default(config, config_file)
+[0m[37m   1.0ms     1 |  94          merge_with_default(config, config_file)
 [0m[90m               |  95        end
 [0m[90m               |  96  
 [0m[90m               |  97        def add_excludes_from_files(config, config_file)
 [0m[90m               |  98          found_files =
-[0m[37m   1.5ms     1 |  99            find_files_upwards(DOTFILE, config_file) +
+[0m[37m   1.7ms     1 |  99            find_files_upwards(DOTFILE, config_file) +
 [0m[90m               |  100            [find_user_dotfile, find_user_xdg_config].compact
 [0m[90m               |  101  
 [0m[90m              .......[0m
 [90m               |  111          @default_configuration ||= begin
 [0m[90m               |  112                                       print 'Default ' if debug?
-[0m[33m  35.6ms     1 |  113                                       load_file(DEFAULT_FILE)
+[0m[33m  38.9ms     1 |  113                                       load_file(DEFAULT_FILE)
 [0m[90m               |  114                                     end
 [0m[90m               |  115        end
 [0m[90m              .......[0m
 [90m               |  122        # disabled.
 [0m[90m               |  123        def merge_with_default(config, config_file)
-[0m[37m   0.9ms     2 |  124          resolver.merge_with_default(config, config_file)
+[0m[37m   1.0ms     2 |  124          resolver.merge_with_default(config, config_file)
 [0m[90m               |  125        end
 [0m[90m               |  126  
 [0m[90m              .......[0m
@@ -566,7 +569,7 @@ lib/rubocop/config_loader.rb
 [0m[90m              .......[0m
 [90m               |  192          # check_duplication(yaml_code, absolute_path)
 [0m[90m               |  193          if File.exist?('c' + File.basename(absolute_path))
-[0m[37m   1.8ms     9 |  194            hash = Marshal.load(File.binread('c' + File.basename(absolute_path)))
+[0m[37m   1.9ms     9 |  194            hash = Marshal.load(File.binread('c' + File.basename(absolute_path)))
 [0m[90m               |  195          else
 [0m[90m               |  196            ## cache
 [0m
@@ -579,13 +582,13 @@ lib/rubocop/file_finder.rb
 [0m[90m              .......[0m
 [90m               |  23      def find_files_upwards(filename, start_dir)
 [0m[90m               |  24        files = []
-[0m[37m   1.5ms     1 |  25        traverse_files_upwards(filename, start_dir) do |file|
+[0m[37m   1.7ms     1 |  25        traverse_files_upwards(filename, start_dir) do |file|
 [0m[90m               |  26          files << file
 [0m[90m               |  27        end
 [0m[90m              .......[0m
 [90m               |  32  
 [0m[90m               |  33      def traverse_files_upwards(filename, start_dir)
-[0m[37m   2.2ms    40 |  34        Pathname.new(start_dir).expand_path.ascend do |dir|
+[0m[37m   2.3ms    40 |  34        Pathname.new(start_dir).expand_path.ascend do |dir|
 [0m[90m               |  35          break if FileFinder.root_level?(dir)
 [0m[90m               |  36  
 [0m[37m   1.3ms    12 |  37          file = dir + filename
@@ -614,7 +617,7 @@ lib/rubocop/file_finder.rb
 lib/rubocop/config_loader_resolver.rb
 [90m               |  20      def resolve_inheritance(path, hash, file, debug)
 [0m[90m               |  21        inherited_files = Array(hash['inherit_from'])
-[0m[31m  51.7ms     3 |  22        base_configs(path, inherited_files, file)
+[0m[31m  56.8ms     3 |  22        base_configs(path, inherited_files, file)
 [0m[90m               |  23          .reverse.each_with_index do |base_config, index|
 [0m[90m               |  24          base_config.each do |k, v|
 [0m[90m              .......[0m
@@ -626,18 +629,18 @@ lib/rubocop/config_loader_resolver.rb
 [0m[90m              .......[0m
 [90m               |  84        result = base_hash.merge(derived_hash)
 [0m[90m               |  85        keys_appearing_in_both = base_hash.keys & derived_hash.keys
-[0m[37m   1.0ms    21 |  86        keys_appearing_in_both.each do |key|
+[0m[37m   1.1ms    21 |  86        keys_appearing_in_both.each do |key|
 [0m[90m               |  87          if opts[:unset_nil] && derived_hash[key].nil?
 [0m[90m               |  88            result.delete(key)
 [0m[90m               |  89          elsif base_hash[key].is_a?(Hash)
-[0m[37m   0.5ms    55 |  90            result[key] = merge(base_hash[key], derived_hash[key], **opts)
+[0m[37m   0.6ms    55 |  90            result[key] = merge(base_hash[key], derived_hash[key], **opts)
 [0m[90m               |  91          elsif should_union?(base_hash, key, opts[:inherit_mode])
 [0m[90m               |  92            result[key] = base_hash[key] | derived_hash[key]
 [0m[90m              .......[0m
 [90m               |  138  
 [0m[90m               |  139      def base_configs(path, inherit_from, file)
-[0m[31m  51.7ms     9 |  140        configs = Array(inherit_from).compact.map do |f|
-[0m[31m  51.7ms     2 |  141          ConfigLoader.load_file(inherited_file(path, f, file))
+[0m[31m  56.7ms     9 |  140        configs = Array(inherit_from).compact.map do |f|
+[0m[31m  56.6ms     2 |  141          ConfigLoader.load_file(inherited_file(path, f, file))
 [0m[90m               |  142        end
 [0m[90m               |  143  
 [0m[90m              .......[0m
@@ -656,36 +659,36 @@ lib/rubocop/config_loader_resolver.rb
 lib/rubocop/cop/cop.rb
 [90m               |  46  
 [0m[90m               |  47        def self.qualified_cop_name(name, origin)
-[0m[33m  30.3ms   454 |  48          registry.qualified_cop_name(name, origin)
+[0m[33m  33.3ms   454 |  48          registry.qualified_cop_name(name, origin)
 [0m[90m               |  49        end
 [0m[90m               |  50  
 [0m
 lib/rubocop/cop/registry.rb
 [90m               |  59          return false unless names
 [0m[90m               |  60  
-[0m[33m  23.0ms  7208 |  61          !(cops & names).empty?
+[0m[33m  25.0ms  7208 |  61          !(cops & names).empty?
 [0m[90m               |  62        end
 [0m[90m               |  63  
 [0m[90m              .......[0m
 [90m               |  95        # @return [String] Qualified cop name
 [0m[90m               |  96        def qualified_cop_name(name, path)
-[0m[33m   6.8ms   454 |  97          badge = Badge.parse(name)
-[0m[33m  17.7ms   454 |  98          return name if registered?(badge)
+[0m[33m   7.3ms   454 |  97          badge = Badge.parse(name)
+[0m[33m  19.3ms   454 |  98          return name if registered?(badge)
 [0m[90m               |  99  
-[0m[37m   4.0ms    14 |  100          potential_badges = qualify_badge(badge)
+[0m[37m   4.6ms    14 |  100          potential_badges = qualify_badge(badge)
 [0m[90m               |  101  
 [0m[90m               |  102          case potential_badges.size
 [0m[90m              .......[0m
 [90m               |  171        def qualify_badge(badge)
 [0m[90m               |  172          @departments
-[0m[37m   1.8ms   154 |  173            .map { |department, _| badge.with_department(department) }
-[0m[37m   2.2ms   140 |  174            .select { |potential_badge| registered?(potential_badge) }
+[0m[37m   2.0ms   154 |  173            .map { |department, _| badge.with_department(department) }
+[0m[37m   2.5ms   140 |  174            .select { |potential_badge| registered?(potential_badge) }
 [0m[90m               |  175        end
 [0m[90m               |  176  
 [0m[90m              .......[0m
 [90m               |  186  
 [0m[90m               |  187        def registered?(badge)
-[0m[33m  18.3ms  1600 |  188          @registry.key?(badge)
+[0m[33m  20.1ms  1600 |  188          @registry.key?(badge)
 [0m[90m               |  189        end
 [0m[90m               |  190      end
 [0m
@@ -699,42 +702,42 @@ lib/rubocop/cop/badge.rb
 [0m[37m   0.6ms   518 |  34          if parts.one?
 [0m[90m               |  35            new(nil, *parts)
 [0m[90m               |  36          else
-[0m[37m   3.4ms  1028 |  37            new(*parts)
+[0m[37m   3.7ms  1028 |  37            new(*parts)
 [0m[90m               |  38          end
 [0m[90m               |  39        end
 [0m[90m               |  40  
 [0m[90m               |  41        def initialize(department, cop_name)
-[0m[37m   0.8ms   640 |  42          @department = department.to_sym if department
+[0m[37m   0.9ms   640 |  42          @department = department.to_sym if department
 [0m[90m               |  43          @cop_name   = cop_name
 [0m[90m               |  44        end
 [0m[90m               |  45  
 [0m[90m               |  46        def ==(other)
-[0m[33m   8.4ms   880 |  47          hash == other.hash
+[0m[33m   9.2ms   880 |  47          hash == other.hash
 [0m[90m               |  48        end
 [0m[90m               |  49        alias eql? ==
 [0m[90m               |  50  
 [0m[90m               |  51        def hash
-[0m[33m  10.4ms  4380 |  52          [department, cop_name].hash
+[0m[33m  11.4ms  4380 |  52          [department, cop_name].hash
 [0m[90m               |  53        end
 [0m[90m               |  54  
 [0m[90m              .......[0m
 [90m               |  67  
 [0m[90m               |  68        def with_department(department)
-[0m[37m   1.0ms   378 |  69          self.class.new(department, cop_name)
+[0m[37m   1.1ms   378 |  69          self.class.new(department, cop_name)
 [0m[90m               |  70        end
 [0m[90m               |  71      end
 [0m
 lib/rubocop/config.rb
 [90m               |  242  
 [0m[90m               |  243      def self.create(hash, path)
-[0m[31m  72.9ms     9 |  244        new(hash, path).check
+[0m[31m  79.0ms     9 |  244        new(hash, path).check
 [0m[90m               |  245      end
 [0m[90m               |  246  
 [0m[90m              .......[0m
 [90m               |  249          warn("#{loaded_path} - #{deprecation_message}")
 [0m[90m               |  250        end
-[0m[31m  64.7ms     3 |  251        validate
-[0m[33m   8.1ms     3 |  252        make_excludes_absolute
+[0m[31m  70.2ms     3 |  251        validate
+[0m[33m   8.7ms     3 |  252        make_excludes_absolute
 [0m[90m               |  253        self
 [0m[90m               |  254      end
 [0m[90m              .......[0m
@@ -746,41 +749,41 @@ lib/rubocop/config.rb
 [0m[90m              .......[0m
 [90m               |  279  
 [0m[90m               |  280      def each_key(&block)
-[0m[33m   8.1ms     3 |  281        @hash.each_key(&block)
+[0m[33m   8.6ms     3 |  281        @hash.each_key(&block)
 [0m[90m               |  282      end
 [0m[90m               |  283  
 [0m[90m              .......[0m
 [90m               |  299  
 [0m[90m               |  300      def to_s
-[0m[33m  19.5ms  5601 |  301        @to_s ||= @hash.to_s
+[0m[33m  21.2ms  5601 |  301        @to_s ||= @hash.to_s
 [0m[90m               |  302      end
 [0m[90m               |  303  
 [0m[90m               |  304      def signature
-[0m[33m  19.7ms     9 |  305        @signature ||= Digest::SHA1.hexdigest(to_s)
+[0m[33m  21.5ms     9 |  305        @signature ||= Digest::SHA1.hexdigest(to_s)
 [0m[90m               |  306      end
 [0m[90m               |  307  
 [0m[90m               |  308      def make_excludes_absolute
-[0m[33m   8.1ms     3 |  309        each_key do |key|
-[0m[33m   5.1ms   463 |  310          validate_section_presence(key)
+[0m[33m   8.6ms     3 |  309        each_key do |key|
+[0m[33m   5.5ms   463 |  310          validate_section_presence(key)
 [0m[37m   0.6ms   463 |  311          next unless self[key]['Exclude']
 [0m[90m               |  312  
-[0m[37m   0.9ms    44 |  313          self[key]['Exclude'].map! do |exclude_elem|
-[0m[90m               |  314            if exclude_elem.is_a?(String) && !absolute?(exclude_elem)
+[0m[37m   1.0ms    44 |  313          self[key]['Exclude'].map! do |exclude_elem|
+[0m[37m   0.2ms   120 |  314            if exclude_elem.is_a?(String) && !absolute?(exclude_elem)
 [0m[37m   0.4ms   126 |  315              File.expand_path(File.join(base_dir_for_path_parameters,
 [0m[90m               |  316                                         exclude_elem))
 [0m[90m               |  317            else
 [0m[90m              .......[0m
 [90m               |  359        return if File.expand_path(loaded_path).start_with?(base_config_path)
 [0m[90m               |  360  
-[0m[33m  36.0ms     6 |  361        valid_cop_names, invalid_cop_names = keys.partition do |key|
-[0m[33m  35.8ms    78 |  362          ConfigLoader.default_configuration.key?(key)
+[0m[33m  39.2ms     6 |  361        valid_cop_names, invalid_cop_names = keys.partition do |key|
+[0m[33m  39.1ms    78 |  362          ConfigLoader.default_configuration.key?(key)
 [0m[90m               |  363        end
 [0m[90m               |  364  
-[0m[37m   1.9ms     2 |  365        reject_obsolete_cops_and_parameters
-[0m[33m  25.0ms     2 |  366        warn_about_unrecognized_cops(invalid_cop_names)
-[0m[37m   0.5ms     2 |  367        check_target_ruby
-[0m[37m   0.9ms     2 |  368        validate_parameter_names(valid_cop_names)
-[0m[37m   0.4ms     2 |  369        validate_enforced_styles(valid_cop_names)
+[0m[37m   2.0ms     2 |  365        reject_obsolete_cops_and_parameters
+[0m[33m  27.4ms     2 |  366        warn_about_unrecognized_cops(invalid_cop_names)
+[0m[37m   0.4ms     2 |  367        check_target_ruby
+[0m[37m   0.7ms     2 |  368        validate_parameter_names(valid_cop_names)
+[0m[37m   0.3ms     2 |  369        validate_enforced_styles(valid_cop_names)
 [0m[90m               |  370        validate_syntax_cop
 [0m[90m               |  371        reject_mutually_exclusive_defaults
 [0m[90m              .......[0m
@@ -792,51 +795,48 @@ lib/rubocop/config.rb
 [0m[90m              .......[0m
 [90m               |  484  
 [0m[90m               |  485      def warn_about_unrecognized_cops(invalid_cop_names)
-[0m[33m  25.0ms     2 |  486        invalid_cop_names.each do |name|
+[0m[33m  27.3ms     2 |  486        invalid_cop_names.each do |name|
 [0m[90m               |  487          # There could be a custom cop with this name. If so, don't warn
-[0m[33m  23.2ms    17 |  488          next if Cop::Cop.registry.contains_cop_matching?([name])
+[0m[33m  25.2ms    17 |  488          next if Cop::Cop.registry.contains_cop_matching?([name])
 [0m[90m               |  489  
 [0m[90m               |  490          # Special case for inherit_mode, which is a directive that we keep in
 [0m[90m              .......[0m
 [90m               |  493          next if name == 'inherit_mode'
 [0m[90m               |  494  
-[0m[37m   0.6ms    34 |  495          warn Rainbow("Warning: unrecognized cop #{name} found in " \
-[0m[37m   0.4ms    34 |  496                       "#{smart_loaded_path}").yellow
+[0m[37m   0.7ms    34 |  495          warn Rainbow("Warning: unrecognized cop #{name} found in " \
+[0m[37m   0.5ms    34 |  496                       "#{smart_loaded_path}").yellow
 [0m[90m               |  497        end
 [0m[90m               |  498      end
 [0m[90m              .......[0m
 [90m               |  511  
 [0m[90m               |  512      def validate_section_presence(name)
-[0m[37m   3.0ms  1455 |  513        return unless key?(name) && self[name].nil?
+[0m[37m   3.2ms  1455 |  513        return unless key?(name) && self[name].nil?
 [0m[90m               |  514  
 [0m[90m               |  515        raise ValidationError,
 [0m[90m              .......[0m
 [90m               |  518  
 [0m[90m               |  519      def validate_parameter_names(valid_cop_names)
-[0m[37m   0.9ms     2 |  520        valid_cop_names.each do |name|
+[0m[37m   0.7ms     2 |  520        valid_cop_names.each do |name|
 [0m[37m   0.3ms    22 |  521          validate_section_presence(name)
 [0m[90m               |  522          default_config = ConfigLoader.default_configuration[name]
 [0m[90m               |  523  
-[0m[37m   0.3ms    44 |  524          self[name].each_key do |param|
-[0m[90m               |  525            next if COMMON_PARAMS.include?(param) || default_config.key?(param)
-[0m[90m               |  526  
 [0m[90m              .......[0m
 [90m               |  536  
 [0m[90m               |  537      def validate_enforced_styles(valid_cop_names)
-[0m[37m   0.4ms     2 |  538        valid_cop_names.each do |name|
+[0m[37m   0.3ms     2 |  538        valid_cop_names.each do |name|
 [0m[90m               |  539          styles = self[name].select { |key, _| key.start_with?('Enforced') }
 [0m[90m               |  540  
 [0m[90m              .......[0m
 [90m               |  555      def reject_obsolete_cops_and_parameters
 [0m[90m               |  556        messages = [
-[0m[37m   1.7ms     2 |  557          obsolete_cops,
+[0m[37m   1.8ms     2 |  557          obsolete_cops,
 [0m[90m               |  558          obsolete_parameters
 [0m[90m               |  559        ].flatten.compact
 [0m[90m              .......[0m
 [90m               |  579  
 [0m[90m               |  580      def obsolete_cops
-[0m[37m   1.7ms     4 |  581        OBSOLETE_COPS.map do |cop_name, message|
-[0m[37m   1.4ms   192 |  582          next unless key?(cop_name) || key?(Cop::Badge.parse(cop_name).cop_name)
+[0m[37m   1.8ms     4 |  581        OBSOLETE_COPS.map do |cop_name, message|
+[0m[37m   1.5ms   192 |  582          next unless key?(cop_name) || key?(Cop::Badge.parse(cop_name).cop_name)
 [0m[90m               |  583  
 [0m[90m               |  584          message + "\n(obsolete configuration found in #{smart_loaded_path}," \
 [0m[90m              .......[0m
@@ -858,14 +858,14 @@ lib/rubocop/config.rb
 [0m[90m              .......[0m
 [90m               |  715  
 [0m[90m               |  716      def smart_loaded_path
-[0m[37m   0.3ms    17 |  717        PathUtil.smart_path(@loaded_path)
+[0m[37m   0.4ms    17 |  717        PathUtil.smart_path(@loaded_path)
 [0m[90m               |  718      end
 [0m[90m               |  719    end
 [0m
 vendor/bundle/ruby/2.6.0/gems/rainbow-3.0.0/lib/rainbow/global.rb
 [90m               |  20  
 [0m[90m               |  21  def Rainbow(string)
-[0m[37m   0.2ms    51 |  22    Rainbow.global.wrap(string.to_s)
+[0m[37m   0.3ms    51 |  22    Rainbow.global.wrap(string.to_s)
 [0m[90m               |  23  end
 [0m
 vendor/bundle/ruby/2.6.0/gems/rainbow-3.0.0/lib/rainbow/wrapper.rb
@@ -885,9 +885,9 @@ vendor/bundle/ruby/2.6.0/gems/rainbow-3.0.0/lib/rainbow/null_presenter.rb
 /Users/hoshino/.rbenv/versions/2.6.3/lib/ruby/2.6.0/rubygems/core_ext/kernel_warn.rb
 [90m               |  13      original_warn = method(:warn)
 [0m[90m               |  14  
-[0m[37m   0.6ms    17 |  15      module_function define_method(:warn) {|*messages, uplevel: nil|
+[0m[37m   0.7ms    17 |  15      module_function define_method(:warn) {|*messages, uplevel: nil|
 [0m[90m               |  16        unless uplevel
-[0m[37m   0.6ms    85 |  17          return original_warn.call(*messages)
+[0m[37m   0.7ms    85 |  17          return original_warn.call(*messages)
 [0m[90m               |  18        end
 [0m[90m               |  19  
 [0m
@@ -901,79 +901,87 @@ lib/rubocop/formatter/formatter_set.rb
 lib/rubocop/result_cache.rb
 [90m               |  23        return unless File.exist?(cache_root)
 [0m[90m               |  24  
-[0m[33m  11.0ms   150 |  25        files, dirs = Find.find(cache_root).partition { |path| File.file?(path) }
+[0m[37m   4.8ms    70 |  25        files, dirs = Find.find(cache_root).partition { |path| File.file?(path) }
 [0m[90m               |  26        return unless requires_file_removal?(files.length, config_store)
 [0m[90m               |  27  
 [0m[90m              .......[0m
 [90m               |  82        @allow_symlinks_in_cache_location =
 [0m[90m               |  83          ResultCache.allow_symlinks_in_cache_location?(config_store)
-[0m[31m  74.8ms     2 |  84        @path = File.join(cache_root, rubocop_checksum,
+[0m[31m  89.6ms     2 |  84        @path = File.join(cache_root, rubocop_checksum,
 [0m[90m               |  85                          relevant_options_digest(options),
-[0m[33m  20.3ms     1 |  86                          file_checksum(file, config_store))
+[0m[33m  22.1ms     1 |  86                          file_checksum(file, config_store))
 [0m[90m               |  87        @cached_data = CachedData.new(file)
 [0m[90m               |  88      end
 [0m[90m              .......[0m
 [90m               |  93  
 [0m[90m               |  94      def load
-[0m[37m   4.1ms     2 |  95        @cached_data.from_json(IO.read(@path, encoding: Encoding::UTF_8))
+[0m[37m   4.3ms     2 |  95        @cached_data.from_json(IO.read(@path, encoding: Encoding::UTF_8))
 [0m[90m               |  96      end
 [0m[90m               |  97  
 [0m[90m              .......[0m
 [90m               |  145        mode = File.stat(file).mode
 [0m[90m               |  146        digester.update(
-[0m[33m  20.0ms     3 |  147          "#{file}#{mode}#{config_store.for(file).signature}"
+[0m[33m  21.8ms     3 |  147          "#{file}#{mode}#{config_store.for(file).signature}"
 [0m[90m               |  148        )
-[0m[90m               |  149        digester.file(file)
+[0m[37m   0.2ms     1 |  149        digester.file(file)
+[0m[90m               |  150        digester.hexdigest
+[0m[90m               |  151      rescue Errno::ENOENT
 [0m[90m              .......[0m
 [90m               |  169            # exe directory. A change to any of them could affect the cop output
 [0m[90m               |  170            # so we include them in the cache hash.
 [0m[37m   0.2ms     4 |  171            source_files = $LOADED_FEATURES + Find.find(exe_root).to_a
 [0m[90m               |  172            sources = source_files
-[0m[33m   9.2ms   993 |  173                      .select { |path| File.file?(path) }
-[0m[37m   0.3ms     1 |  174                      .sort
-[0m[33m  31.1ms   988 |  175                      .map { |path| IO.read(path, encoding: Encoding::UTF_8) }
-[0m[33m  13.5ms     9 |  176            Digest::SHA1.hexdigest(sources.join)
+[0m[33m  13.4ms   993 |  173                      .select { |path| File.file?(path) }
+[0m[37m   0.4ms     1 |  174                      .sort
+[0m[33m  39.3ms   988 |  175                      .map { |path| IO.read(path, encoding: Encoding::UTF_8) }
+[0m[33m  14.1ms     9 |  176            Digest::SHA1.hexdigest(sources.join)
 [0m[90m               |  177          end
 [0m[90m               |  178      end
 [0m
 /Users/hoshino/.rbenv/versions/2.6.3/lib/ruby/2.6.0/find.rb
 [90m               |  41      fs_encoding = Encoding.find("filesystem")
 [0m[90m               |  42  
-[0m[33m   9.9ms    12 |  43      paths.collect!{|d| raise Errno::ENOENT, d unless File.exist?(d); d.dup}.each do |path|
+[0m[37m   4.4ms    12 |  43      paths.collect!{|d| raise Errno::ENOENT, d unless File.exist?(d); d.dup}.each do |path|
 [0m[90m               |  44        path = path.to_path if path.respond_to? :to_path
 [0m[90m               |  45        enc = path.encoding == Encoding::US_ASCII ? fs_encoding : path.encoding
 [0m[90m               |  46        ps = [path]
 [0m[90m               |  47        while file = ps.shift
-[0m[33m   9.2ms   148 |  48          catch(:prune) do
-[0m[37m   1.2ms   592 |  49            yield file.dup.taint
+[0m[37m   4.1ms    68 |  48          catch(:prune) do
+[0m[37m   0.5ms   272 |  49            yield file.dup.taint
 [0m[90m               |  50            begin
-[0m[37m   1.2ms   148 |  51              s = File.lstat(file)
+[0m[37m   0.5ms    68 |  51              s = File.lstat(file)
 [0m[90m               |  52            rescue Errno::ENOENT, Errno::EACCES, Errno::ENOTDIR, Errno::ELOOP, Errno::ENAMETOOLONG
 [0m[90m               |  53              raise unless ignore_error
 [0m[90m              .......[0m
 [90m               |  56            if s.directory? then
 [0m[90m               |  57              begin
-[0m[37m   2.2ms   140 |  58                fs = Dir.children(file, encoding: enc)
+[0m[37m   1.0ms    64 |  58                fs = Dir.children(file, encoding: enc)
 [0m[90m               |  59              rescue Errno::ENOENT, Errno::EACCES, Errno::ENOTDIR, Errno::ELOOP, Errno::ENAMETOOLONG
 [0m[90m               |  60                raise unless ignore_error
 [0m[90m              .......[0m
 [90m               |  62              end
 [0m[90m               |  63              fs.sort!
-[0m[37m   1.5ms    70 |  64              fs.reverse_each {|f|
-[0m[37m   0.4ms   146 |  65                f = File.join(file, f)
-[0m[37m   0.4ms   292 |  66                ps.unshift f.untaint
-[0m[90m               |  67              }
-[0m[90m               |  68            end
+[0m[37m   0.6ms    32 |  64              fs.reverse_each {|f|
+[0m[90m               |  65                f = File.join(file, f)
+[0m[90m               |  66                ps.unshift f.untaint
+[0m
+/Users/hoshino/.rbenv/versions/2.6.3/lib/ruby/2.6.0/digest.rb
+[90m               |  48      # returns self.
+[0m[90m               |  49      def file(name)
+[0m[37m   0.2ms     4 |  50        File.open(name, "rb") {|f|
+[0m[90m               |  51          buf = ""
+[0m[90m               |  52          while f.read(16384, buf)
 [0m
 lib/rubocop/cached_data.rb
 [90m               |  11  
 [0m[90m               |  12      def from_json(text)
-[0m[37m   4.0ms     2 |  13        deserialize_offenses(JSON.parse(text))
+[0m[37m   4.2ms     2 |  13        deserialize_offenses(JSON.parse(text))
 [0m[90m               |  14      end
 [0m[90m               |  15  
 [0m[90m              .......[0m
-[90m               |  46        source_buffer = Parser::Source::Buffer.new(@filename)
-[0m[90m               |  47        source_buffer.source = File.read(@filename, encoding: Encoding::UTF_8)
+[90m               |  45      def deserialize_offenses(offenses)
+[0m[90m               |  46        source_buffer = Parser::Source::Buffer.new(@filename)
+[0m[37m   0.2ms     2 |  47        source_buffer.source = File.read(@filename, encoding: Encoding::UTF_8)
 [0m[37m   3.4ms     1 |  48        offenses.map! do |o|
 [0m[37m   0.7ms   142 |  49          location = Parser::Source::Range.new(source_buffer,
 [0m[90m               |  50                                               o['location']['begin_pos'],
@@ -985,14 +993,14 @@ lib/rubocop/cached_data.rb
 /Users/hoshino/.rbenv/versions/2.6.3/lib/ruby/2.6.0/json/common.rb
 [90m               |  154    # * *array_class*: Defaults to Array
 [0m[90m               |  155    def parse(source, opts = {})
-[0m[37m   0.4ms    12 |  156      Parser.new(source, opts).parse
+[0m[37m   0.6ms    12 |  156      Parser.new(source, opts).parse
 [0m[90m               |  157    end
 [0m[90m               |  158  
 [0m
 vendor/bundle/ruby/2.6.0/gems/parser-2.6.3.0/lib/parser/source/buffer.rb
 [90m               |  220        def line_for_position(position)
 [0m[90m               |  221          @line_for_position[position] ||= begin
-[0m[33m   6.4ms    68 |  222            line_no, _ = line_for(position)
+[0m[33m   6.3ms    68 |  222            line_no, _ = line_for(position)
 [0m[90m               |  223            @first_line + line_no
 [0m[90m               |  224          end
 [0m[90m              .......[0m
@@ -1049,7 +1057,7 @@ lib/rubocop/cop/offense.rb
 [0m[90m              .......[0m
 [90m               |  155        # reason is that editors, such as Emacs, expect this.
 [0m[90m               |  156        def real_column
-[0m[37m   1.2ms    71 |  157          column + 1
+[0m[37m   1.1ms    71 |  157          column + 1
 [0m[90m               |  158        end
 [0m[90m               |  159  
 [0m
@@ -1083,7 +1091,12 @@ lib/rubocop/formatter/simple_text_formatter.rb
 [0m[90m               |  48          end
 [0m[90m               |  49        end
 [0m[90m              .......[0m
-[90m               |  68        def colored_severity_code(offense)
+[90m               |  63        def count_stats(offenses)
+[0m[90m               |  64          @total_offense_count += offenses.count
+[0m[90m               |  65          @total_correction_count += offenses.count(&:corrected?)
+[0m[90m               |  66        end
+[0m[90m               |  67  
+[0m[90m               |  68        def colored_severity_code(offense)
 [0m[90m               |  69          color = COLOR_FOR_SEVERITY[offense.severity.name]
 [0m[37m   2.0ms   142 |  70          colorize(offense.severity.code, color)
 [0m[90m               |  71        end
@@ -1101,13 +1114,13 @@ lib/rubocop/formatter/simple_text_formatter.rb
 lib/rubocop/formatter/colorizable.rb
 [90m               |  20  
 [0m[90m               |  21        def colorize(string, *args)
-[0m[37m   1.8ms   431 |  22          rainbow.wrap(string).color(*args)
+[0m[37m   1.9ms   431 |  22          rainbow.wrap(string).color(*args)
 [0m[90m               |  23        end
 [0m[90m               |  24  
 [0m[90m              .......[0m
 [90m               |  33          white
 [0m[90m               |  34        ].each do |color|
-[0m[37m   1.5ms    72 |  35          define_method(color) do |string|
+[0m[37m   1.6ms    72 |  35          define_method(color) do |string|
 [0m[37m   1.3ms    72 |  36            colorize(string, color)
 [0m[90m               |  37          end
 [0m[90m               |  38        end

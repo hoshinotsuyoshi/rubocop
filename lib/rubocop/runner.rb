@@ -31,7 +31,11 @@ module RuboCop
     end
 
     def run(paths)
-      target_files = find_target_files(paths)
+      if paths.one? && File.exist?(paths.first) && !File.directory?(paths.first)
+        target_files = [File.absolute_path(paths.first)]
+      else
+        target_files = find_target_files(paths)
+      end
       if @options[:list_target_files]
         list_files(target_files)
       else

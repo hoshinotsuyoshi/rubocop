@@ -77,6 +77,7 @@ after
 
 before
 
+lib/rubocop/cop/registry.rb
                |  59          return false unless names
                |  60
  106.9ms  7208 |  61          cops.any? { |cop| cop.match?(names) }
@@ -94,6 +95,15 @@ before
               .......
 
 after
+
+
+lib/rubocop/cop/registry.rb
+               |  59          return false unless names
+               |  60
+  22.4ms  7208 |  61          !(cops & names).empty?
+               |  62        end
+               |  63
+
               .......
                |  484
                |  485      def warn_about_unrecognized_cops(invalid_cop_names)
@@ -103,3 +113,14 @@ after
                |  489
                |  490          # Special case for inherit_mode, which is a directive that we keep in
               .......
+
+* 引数が1個の単純なときスキップしたい
+
+before
+
+lib/rubocop/runner.rb
+               |  36        #  target_files = [File.absolute_path(paths.first)]
+               |  37        # else
+  82.2ms     1 |  38        target_files = find_target_files(paths)
+               |  39        # end
+               |  40        # warn(Time.now - t)
