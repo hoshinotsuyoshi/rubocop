@@ -61,11 +61,15 @@ module RuboCop
       end
 
       def self.cop_name
-        badge.to_s
+        @cop_name ||= badge.to_s
       end
 
       def self.department
-        badge.department
+        @department ||= badge.department
+      end
+
+      def self.department_name
+        @department_name ||= department.to_s
       end
 
       def self.lint?
@@ -78,7 +82,7 @@ module RuboCop
         return false unless given_names
 
         given_names.include?(cop_name) ||
-          given_names.include?(department.to_s)
+          given_names.include?(department_name)
       end
 
       # List of cops that should not try to autocorrect at the same
@@ -109,7 +113,7 @@ module RuboCop
       def cop_config
         # Use department configuration as basis, but let individual cop
         # configuration override.
-        @cop_config ||= @config.for_cop(self.class.department.to_s)
+        @cop_config ||= @config.for_cop(self.class.department_name)
                                .merge(@config.for_cop(self))
       end
 

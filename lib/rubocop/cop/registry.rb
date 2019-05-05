@@ -56,7 +56,9 @@ module RuboCop
       end
 
       def contains_cop_matching?(names)
-        cops.any? { |cop| cop.match?(names) }
+        return false unless names
+
+        !(cops & names).empty?
       end
 
       # Convert a user provided cop name into a properly namespaced name

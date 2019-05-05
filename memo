@@ -17,3 +17,89 @@ after
                |  614          # pattern.scan(TOKEN).reject { |token| token =~ /\A#{SEPARATORS}\Z/ }
   24.8ms  5562 |  615          pattern.scan(TOKEN).reject { |token| token =~ XXXX }
 
+
+
+
+* 以下のように cop.rbの一部メソッドをメモ化(110ms)
+
+before
+
+.....
+               |  62
+               |  63        def self.cop_name
+  89.3ms 14348 |  64          badge.to_s
+               |  65        end
+               |  66
+               |  67        def self.department
+  10.2ms  7174 |  68          badge.department
+               |  69        end
+               |  70
+              .......
+               |  78          return false unless given_names
+               |  79
+ 128.5ms 14348 |  80          given_names.include?(cop_name) ||
+  49.6ms 21522 |  81            given_names.include?(department.to_s)
+               |  82        end
+               |  83
+
+
+after
+              .......
+               |  70
+               |  71        def self.department_name
+   1.2ms   844 |  72          @department_name ||= department.to_s
+               |  73        end
+               |  74
+              .......
+               |  82          return false unless given_names
+               |  83
+  20.6ms 14348 |  84          given_names.include?(cop_name) ||
+  21.7ms 14348 |  85            given_names.include?(department_name)
+               |  86        end
+               |  87
+
+*Array#&を使う
+
+
+```
+--- a/lib/rubocop/cop/registry.rb
++++ b/lib/rubocop/cop/registry.rb
+@@ -56,7 +56,9 @@ module RuboCop
+       end
+
+       def contains_cop_matching?(names)
+-        cops.any? { |cop| cop.match?(names) }
++        return false unless names
++
++        !(cops & names).empty?
+       end
+```
+
+before
+
+               |  59          return false unless names
+               |  60
+ 106.9ms  7208 |  61          cops.any? { |cop| cop.match?(names) }
+               |  62        end
+               |  63
+
+              .......
+               |  484
+               |  485      def warn_about_unrecognized_cops(invalid_cop_names)
+ 108.6ms     2 |  486        invalid_cop_names.each do |name|
+               |  487          # There could be a custom cop with this name. If so, don't warn
+ 106.4ms    17 |  488          next if Cop::Cop.registry.contains_cop_matching?([name])
+               |  489
+               |  490          # Special case for inherit_mode, which is a directive that we keep in
+              .......
+
+after
+              .......
+               |  484
+               |  485      def warn_about_unrecognized_cops(invalid_cop_names)
+  25.0ms     2 |  486        invalid_cop_names.each do |name|
+               |  487          # There could be a custom cop with this name. If so, don't warn
+  23.2ms    17 |  488          next if Cop::Cop.registry.contains_cop_matching?([name])
+               |  489
+               |  490          # Special case for inherit_mode, which is a directive that we keep in
+              .......
