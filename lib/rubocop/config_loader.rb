@@ -190,7 +190,7 @@ module RuboCop
 
       def load_yaml_configuration(absolute_path)
         yaml_code = read_file(absolute_path)
-        check_duplication(yaml_code, absolute_path)
+        # check_duplication(yaml_code, absolute_path)
         hash = yaml_safe_load(yaml_code, absolute_path) || {}
 
         puts "configuration from #{absolute_path}" if debug?
