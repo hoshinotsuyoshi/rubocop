@@ -189,9 +189,15 @@ module RuboCop
       end
 
       def load_yaml_configuration(absolute_path)
-        yaml_code = read_file(absolute_path)
         # check_duplication(yaml_code, absolute_path)
-        hash = yaml_safe_load(yaml_code, absolute_path) || {}
+        if File.exist?('c' + File.basename(absolute_path))
+          hash = Marshal.load(File.binread('c' + File.basename(absolute_path)))
+        else
+          ## cache
+          yaml_code = read_file(absolute_path)
+          hash = yaml_safe_load(yaml_code, absolute_path) || {}
+          File.write('c' + File.basename(absolute_path), Marshal.dump(hash))
+        end
 
         puts "configuration from #{absolute_path}" if debug?
 

@@ -606,11 +606,11 @@ module RuboCop
 
       XXXX = /\A#{SEPARATORS}\Z/.freeze
       def self.tokens(pattern)
-        # $AAA ||= 0
-        # if $AAA < 10
-        #   STDERR.puts pattern
-        #   $AAA += 1
-        # end
+        $AAA ||= 0
+        if $AAA < 1
+          STDERR.puts XXXX
+          $AAA += 1
+        end
         pattern.scan(TOKEN).reject { |token| token =~ XXXX }
       end
     end

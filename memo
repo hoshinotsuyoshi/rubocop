@@ -1,0 +1,19 @@
+* -f quiet するとよい
+* yaml重複チェックオフ
+* キャッシュが10000とかあると遅い, File.file?が10000回呼ばれて遅い(1回0.07msかかる)
+  * 10000あっても大丈夫なようにするプルリクチャンス
+* 以下のように、１個フリーズすると早い
+
+before
+
+-------
+
+  56.4ms  5562 |  614          pattern.scan(TOKEN).reject { |token| token =~ /\A#{SEPARATORS}\Z/ }
+               |  615          # pattern.scan(TOKEN).reject { |token| token =~ XXXX }
+
+after
+-------
+
+               |  614          # pattern.scan(TOKEN).reject { |token| token =~ /\A#{SEPARATORS}\Z/ }
+  24.8ms  5562 |  615          pattern.scan(TOKEN).reject { |token| token =~ XXXX }
+

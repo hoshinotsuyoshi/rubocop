@@ -18,12 +18,12 @@ target = /./
 
 result = nil
 
-profile = lineprof(target) do
 
-###
 cli = RuboCop::CLI.new
 result = 0
 
+profile = lineprof(target) do
+###
 time = Benchmark.realtime do
   result = cli.run
 end
