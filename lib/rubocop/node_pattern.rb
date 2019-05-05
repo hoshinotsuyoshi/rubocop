@@ -604,8 +604,14 @@ module RuboCop
           .gsub(SEQ_HEAD_GUARD, '')
       end
 
+      XXXX = /\A#{SEPARATORS}\Z/.freeze
       def self.tokens(pattern)
-        pattern.scan(TOKEN).reject { |token| token =~ /\A#{SEPARATORS}\Z/ }
+        # $AAA ||= 0
+        # if $AAA < 10
+        #   STDERR.puts pattern
+        #   $AAA += 1
+        # end
+        pattern.scan(TOKEN).reject { |token| token =~ XXXX }
       end
     end
     private_constant :Compiler
