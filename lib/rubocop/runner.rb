@@ -72,7 +72,13 @@ module RuboCop
 
       each_inspected_file(files) { |file| inspected_files << file }
     ensure
-      ResultCache.cleanup(@config_store, @options[:debug]) if cached_run?
+      # OPTIMIZE: Calling ResultCache.cleanup takes time, so we avoid it when
+      # inspecting only one file.
+      worth_to_call_cleanup = files.size > 1
+
+      if worth_to_call_cleanup
+        ResultCache.cleanup(@config_store, @options[:debug]) if cached_run?
+      end
       formatter_set.finished(inspected_files.freeze)
       formatter_set.close_output_files
     end
